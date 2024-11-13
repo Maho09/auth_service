@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 def index(request):
-    
+
     return render(request, "perfumes/index.html")
 
 
@@ -35,6 +35,13 @@ def login_view(request):
         password = request.POST["password"]
         try:
             user = User.objects.get(username=username)
+            if user.attempts >= 3:
+                user.is_active = False
+                user.save()
+                messages.error(
+                    request, "Your account is locked.\n Please verifey your email"
+                )
+                return redirect(forgot_pass)
             print(user)
 
         except User.DoesNotExist:
@@ -55,13 +62,13 @@ def login_view(request):
                     )
                     return redirect(forgot_pass)
 
-                elif user.attempts >= 3:
-                    user.is_active = False
-                    user.save()
-                    messages.error(
-                        request, "Your account is locked.\n Please verifey your email"
-                    )
-                    return redirect(forgot_pass)
+                # elif user.attempts >= 3:
+                #     user.is_active = False
+                #     user.save()
+                #     messages.error(
+                #         request, "Your account is locked.\n Please verifey your email"
+                #     )
+                #     return redirect(forgot_pass)
 
                 elif user.logged_in == True:
 
@@ -95,13 +102,13 @@ def login_view(request):
             user.attempts += 1
             logger.warning(f"{user.username} : incorrect attempt to login!")
             user.save()
-            if user.attempts >= 3:
-                user.is_active = False
-                user.save()
-                messages.error(
-                    request, "Your account is locked.\n Please verifey your email"
-                )
-                return redirect(forgot_pass)
+            # if user.attempts >= 3:
+            #     user.is_active = False
+            #     user.save()
+            #     messages.error(
+            #         request, "Your account is locked.\n Please verifey your email"
+            #     )
+            #     return redirect(forgot_pass)
             return render(
                 request,
                 "perfumes/login.html",
@@ -139,7 +146,7 @@ def logout_view(request):
     except Exception:
         return HttpResponseRedirect(reverse("index"))
     logger.info(f"{user.username} logged out!")
-    
+
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
@@ -162,7 +169,7 @@ def register(request):
             return render(
                 request, "perfumes/register.html", {"message": "Passwords must match."}
             )
-        
+
         # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
