@@ -42,7 +42,6 @@ def login_view(request):
                     request, "Your account is locked.\n Please verifey your email"
                 )
                 return redirect(forgot_pass)
-            print(user)
 
         except User.DoesNotExist:
             return render(
@@ -61,14 +60,6 @@ def login_view(request):
                         request, "Your account is locked.\n Please verifey your email"
                     )
                     return redirect(forgot_pass)
-
-                # elif user.attempts >= 3:
-                #     user.is_active = False
-                #     user.save()
-                #     messages.error(
-                #         request, "Your account is locked.\n Please verifey your email"
-                #     )
-                #     return redirect(forgot_pass)
 
                 elif user.logged_in == True:
 
@@ -96,19 +87,12 @@ def login_view(request):
                     "perfumes/login.html",
                     {"message": "Invalid username and/or password."},
                 )
-        # user = authenticate(request, username=username, password=password)
         else:
             user = User.objects.get(username=username)
             user.attempts += 1
             logger.warning(f"{user.username} : incorrect attempt to login!")
             user.save()
-            # if user.attempts >= 3:
-            #     user.is_active = False
-            #     user.save()
-            #     messages.error(
-            #         request, "Your account is locked.\n Please verifey your email"
-            #     )
-            #     return redirect(forgot_pass)
+
             return render(
                 request,
                 "perfumes/login.html",
@@ -123,15 +107,7 @@ def login_view(request):
             user.save()
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
-        # else:
-        #     user0.attempts += 1
-        #     logger.warning(f"{user0.username} : incorrect attempt to login!")
-        #     user0.save()
-        #     return render(
-        #         request,
-        #         "perfumes/login.html",
-        #         {"message": "Invalid username and/or password."},
-        #     )
+
     else:
         return render(request, "perfumes/login.html")
 
