@@ -25,9 +25,9 @@ Before you begin, ensure you have met the following requirements:
 
 1. Clone this repository:
 
-   ```bash
+  ```bash
    git clone https://github.com/maho09/auth_service.git
-   ```
+  ```
 2. Create a virtual environment and activate it:
 
   ```bash
