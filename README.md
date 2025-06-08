@@ -83,4 +83,4 @@ Visit http://127.0.0.1:8000/ in your browser to access the application.
 
 - register.js: Client-side validation for password strength during registration.
 
-  #### The repo is still under development. Any comment is most welcome😁
+  #### The repo is still under development. All comments are most welcome😁
