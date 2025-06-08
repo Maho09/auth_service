@@ -27,7 +27,6 @@ Before you begin, ensure you have met the following requirements:
 
    ```bash
    git clone https://github.com/maho09/auth_service.git
-   cd django-otp-auth
    ```
 2. Create a virtual environment and activate it:
 
